@@ -1,18 +1,17 @@
+import NewTodoForm from "@/component/NewTodoForm";
+import TodoList from "@/component/TodoList";
 import { useState } from "react";
 
-export default function App() {
-  const [newItem, setNewItem] = useState("");
+const App = () => {
   const [todos, setTodos] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const addTodo = (title) => {
     setTodos((currentTodos) => {
       return [
         ...currentTodos,
-        { id: crypto.randomUUID(), title: newItem, completed: false },
+        { id: crypto.randomUUID(), title, completed: false },
       ];
     });
-    setNewItem("");
   };
 
   const toggleTodo = (id, completed) => {
@@ -25,6 +24,7 @@ export default function App() {
       });
     });
   };
+
   const deleteTodo = (id) => {
     setTodos((currentTodos) => {
       return currentTodos.filter((todo) => todo.id !== id);
@@ -33,41 +33,11 @@ export default function App() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="new-item-form">
-        <div className="form-row">
-          <label htmlFor="item">NewItem</label>
-          <input
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            type="text"
-            id="item"
-          />
-        </div>
-        <button className="btn">Add</button>
-      </form>
+      <NewTodoForm onSubmit={addTodo} />
       <h1 className="header">Todo List</h1>
-      <ul className="list">
-        {todos.map((todo) => {
-          return (
-            <li key={todo.id}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={(e) => toggleTodo(todo.id, e.target.checked)}
-                />
-                {todo.title}
-              </label>
-              <button
-                onClick={() => deleteTodo(todo.id)}
-                class="btn btn-danger"
-              >
-                Delete
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
     </>
   );
-}
+};
+
+export default App;
