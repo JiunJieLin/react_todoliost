@@ -15,4 +15,4 @@ const Item = ({ completed, id, title, toggleTodo, deleteTodo }) => {
     </li>
   );
 };
-export default TodoItem;
+export default Item;
